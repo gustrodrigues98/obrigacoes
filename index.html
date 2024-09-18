@@ -1,0 +1,159 @@
+<html><head><base href="https://obrigacoesfiscais.br/">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Obrigações Fiscais e Contábeis do Brasil</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f0f0;
+    }
+    .container {
+        width: 90%;
+        margin: auto;
+        overflow: hidden;
+        padding: 20px;
+    }
+    h1 {
+        color: #333;
+        text-align: center;
+    }
+    .regime {
+        background: #fff;
+        border-radius: 5px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .regime h2 {
+        color: #0066cc;
+    }
+    .obrigacao {
+        border-bottom: 1px solid #eee;
+        padding: 10px 0;
+    }
+    .obrigacao:last-child {
+        border-bottom: none;
+    }
+    .data {
+        font-weight: bold;
+        color: #e74c3c;
+    }
+    .link {
+        color: #3498db;
+        text-decoration: none;
+    }
+    .link:hover {
+        text-decoration: underline;
+    }
+    #filtro {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        <h1>Obrigações Fiscais, Contábeis e Pessoais do Brasil</h1>
+        
+        <input type="text" id="filtro" placeholder="Filtrar obrigações...">
+
+        <div id="regimes"></div>
+    </div>
+
+    <script>
+        const regimes = [
+            {
+                nome: "Simples Nacional",
+                obrigacoes: [
+                    {nome: "PGDAS-D", data: "20 de cada mês", link: "simples-nacional/pgdas-d"},
+                    {nome: "DEFIS", data: "31 de março", link: "simples-nacional/defis"},
+                    {nome: "GFIP", data: "7 de cada mês", link: "previdencia/gfip"}
+                ]
+            },
+            {
+                nome: "Lucro Presumido",
+                obrigacoes: [
+                    {nome: "DCTF", data: "15 de cada mês", link: "receita-federal/dctf"},
+                    {nome: "EFD Contribuições", data: "10 do segundo mês subsequente", link: "receita-federal/efd-contribuicoes"},
+                    {nome: "ECF", data: "31 de julho", link: "receita-federal/ecf"}
+                ]
+            },
+            {
+                nome: "Lucro Real",
+                obrigacoes: [
+                    {nome: "EFD ICMS IPI", data: "20 de cada mês", link: "receita-estadual/efd-icms-ipi"},
+                    {nome: "ECD", data: "31 de maio", link: "receita-federal/ecd"},
+                    {nome: "ECF", data: "31 de julho", link: "receita-federal/ecf"}
+                ]
+            },
+            {
+                nome: "Pessoa Física",
+                obrigacoes: [
+                    {nome: "Declaração do Imposto de Renda", data: "30 de abril", link: "receita-federal/irpf"},
+                    {nome: "DIRF", data: "28 de fevereiro", link: "receita-federal/dirf"}
+                ]
+            }
+        ];
+
+        function renderRegimes() {
+            const regimesContainer = document.getElementById('regimes');
+            regimesContainer.innerHTML = '';
+
+            regimes.forEach(regime => {
+                const regimeElement = document.createElement('div');
+                regimeElement.className = 'regime';
+                regimeElement.innerHTML = `
+                    <h2>${regime.nome}</h2>
+                    ${regime.obrigacoes.map(obrigacao => `
+                        <div class="obrigacao">
+                            <span>${obrigacao.nome}</span> - 
+                            <span class="data">${obrigacao.data}</span> - 
+                            <a href="${obrigacao.link}" class="link" target="_blank">Cumprir Obrigação</a>
+                        </div>
+                    `).join('')}
+                `;
+                regimesContainer.appendChild(regimeElement);
+            });
+        }
+
+        function filtrarObrigacoes() {
+            const filtro = document.getElementById('filtro').value.toLowerCase();
+            const regimesContainer = document.getElementById('regimes');
+            regimesContainer.innerHTML = '';
+
+            regimes.forEach(regime => {
+                const obrigacoesFiltradas = regime.obrigacoes.filter(obrigacao => 
+                    obrigacao.nome.toLowerCase().includes(filtro) ||
+                    obrigacao.data.toLowerCase().includes(filtro)
+                );
+
+                if (obrigacoesFiltradas.length > 0) {
+                    const regimeElement = document.createElement('div');
+                    regimeElement.className = 'regime';
+                    regimeElement.innerHTML = `
+                        <h2>${regime.nome}</h2>
+                        ${obrigacoesFiltradas.map(obrigacao => `
+                            <div class="obrigacao">
+                                <span>${obrigacao.nome}</span> - 
+                                <span class="data">${obrigacao.data}</span> - 
+                                <a href="${obrigacao.link}" class="link" target="_blank">Cumprir Obrigação</a>
+                            </div>
+                        `).join('')}
+                    `;
+                    regimesContainer.appendChild(regimeElement);
+                }
+            });
+        }
+
+        renderRegimes();
+
+        document.getElementById('filtro').addEventListener('input', filtrarObrigacoes);
+    </script>
+</body>
+</html>
